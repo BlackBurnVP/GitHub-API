@@ -11,17 +11,38 @@ import com.example.vitalii.myapplication.api.GitHubService
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.ArrayList
+import android.content.Intent
+import android.widget.Toast
+
+
 
 class MainActivity : AppCompatActivity() {
 
     lateinit var recyclerView: RecyclerView
     var posts: MutableList<GitHubPOJO> = ArrayList()
 
+    private fun addShortcut() {
+        //Adding shortcut for MainActivity
+        //on Home screen
+        val shortcutIntent = Intent(
+            applicationContext,
+            MainActivity::class.java
+        )
+        shortcutIntent.action = Intent.ACTION_MAIN
+
+        val addIntent = Intent()
+            Intent.ShortcutIconResource.fromContext(
+                applicationContext,
+                R.mipmap.ic_launcher
+            )
+
+        addIntent.action = "com.android.launcher.action.INSTALL_SHORTCUT"
+        addIntent.putExtra("duplicate", false)  //may it's already there so don't duplicate
+        applicationContext.sendBroadcast(addIntent)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-
     }
     fun click(view: View){
         posts = ArrayList()
@@ -33,6 +54,7 @@ class MainActivity : AppCompatActivity() {
 
         val adapter = PostsAdapter(posts)
         recyclerView.adapter = adapter
+
         val service = Retrofit.Builder()
             .baseUrl("https://api.github.com/") // Change your api
             .addConverterFactory(GsonConverterFactory.create())
@@ -46,7 +68,19 @@ class MainActivity : AppCompatActivity() {
                     recyclerView.adapter?.notifyDataSetChanged()
                 }
 
-                override fun onFailure(call: Call<List<GitHubPOJO>>, t: Throwable) = t.printStackTrace()
+                override fun onFailure(call: Call<List<GitHubPOJO>>, t: Throwable) {
+                    Toast.makeText(this@MainActivity, "Error occured while networking", Toast.LENGTH_SHORT).show()
+                }
             })
+        recyclerView.addOnItemTouchListener(
+            ClickListener(this, recyclerView, object : ClickListener.OnItemClickListener {
+                override fun onLongItemClick(view: View?, position: Int) {
+                }
+
+                override fun onItemClick(view: View, position: Int) {
+                    println("Nice")
+                }
+            })
+        )
     }
 }
