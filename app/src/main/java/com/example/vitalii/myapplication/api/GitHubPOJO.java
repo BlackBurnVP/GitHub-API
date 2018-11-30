@@ -1,9 +1,9 @@
-package com.example.vitalii.myapplication;
+package com.example.vitalii.myapplication.api;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class GitHubServicej {
+public class GitHubPOJO {
 
     @SerializedName("id")
     @Expose
