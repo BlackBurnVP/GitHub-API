@@ -13,12 +13,19 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.ArrayList
 import android.content.Intent
 import android.net.Uri
+import android.support.design.widget.NavigationView
+import android.support.v4.view.GravityCompat
+import android.support.v4.widget.DrawerLayout
+import android.support.v7.app.ActionBar
+import android.support.v7.widget.Toolbar
+import android.view.MenuItem
 import android.widget.Toast
 
 
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var mDrawerLayout: DrawerLayout
     lateinit var recyclerView: RecyclerView
     var posts: MutableList<GitHubPOJO> = ArrayList()
 
@@ -38,12 +45,35 @@ class MainActivity : AppCompatActivity() {
             )
 
         addIntent.action = "com.android.launcher.action.INSTALL_SHORTCUT"
-        addIntent.putExtra("duplicate", false)  //may it's already there so don't duplicate
+        addIntent.putExtra("duplicate", false)
         applicationContext.sendBroadcast(addIntent)
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        mDrawerLayout = findViewById(R.id.drawer_layout)
+
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+
+        val actionbar: ActionBar? = supportActionBar
+        actionbar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.ic_menu)
+        }
+
+        val navigationView: NavigationView = findViewById(R.id.nav_view)
+        navigationView.setNavigationItemSelectedListener { menuItem ->
+            // set item as selected to persist highlight
+            menuItem.isChecked = true
+            // close drawer when item is tapped
+            mDrawerLayout.closeDrawers()
+
+            // Add code here to update the UI based on the item selected
+            // For example, swap UI fragments here
+
+            true
+        }
     }
     fun click(view: View){
         posts = ArrayList()
@@ -85,5 +115,15 @@ class MainActivity : AppCompatActivity() {
                 }
             })
         )
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                mDrawerLayout.openDrawer(GravityCompat.START)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 }

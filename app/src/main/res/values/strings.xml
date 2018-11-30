@@ -2,4 +2,8 @@
     <string name="app_name">GitHub Repositories</string>
     <string name="there_wiil_be_your_text">There will be your text</string>
     <string name="There_will_be_second_text">Bash.im</string>
+    <string name="show">Show</string>
+    <string name="enter_user_name">Enter user name</string>
+    <string name="about">About</string>
+    <string name="credentials">Credentials</string>
 </resources>
