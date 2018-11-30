@@ -12,6 +12,7 @@ import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.ArrayList
 import android.content.Intent
+import android.net.Uri
 import android.widget.Toast
 
 
@@ -78,7 +79,9 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 override fun onItemClick(view: View, position: Int) {
-                    println("Nice")
+                    val url = posts!![position].htmlUrl
+                    val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                    startActivity(browserIntent)
                 }
             })
         )
