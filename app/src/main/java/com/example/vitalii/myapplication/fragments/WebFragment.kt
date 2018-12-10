@@ -15,7 +15,6 @@ private const val ARG_PARAM2 = "param2"
 
 class WebFragment : Fragment() {
 
-    val URL:String = ""
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -28,6 +27,4 @@ class WebFragment : Fragment() {
         webView.loadUrl(arg.navUrl)
         return view
     }
-
-
 }

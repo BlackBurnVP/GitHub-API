@@ -42,7 +42,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintVertical_bias="0.64"
-                style="@style/textStyle"/>
+                style="@style/textStyle" android:textColor="@android:color/black"/>
     </android.support.constraint.ConstraintLayout>
 
 </layout>
