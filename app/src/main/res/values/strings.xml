@@ -2,8 +2,15 @@
     <string name="app_name">GitHub Repositories</string>
     <string name="there_wiil_be_your_text">There will be your text</string>
     <string name="There_will_be_second_text">Bash.im</string>
-    <string name="show">Show</string>
-    <string name="enter_user_name">Enter user name</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="about">About</string>
     <string name="credentials">Credentials</string>
+    <string name="enter_user_name">Enter user name</string>
+    <string name="show">Show</string>
+    <string name="about_git">In this program you can Enter users\'s name from GitHub and look at his repositories. Also
+        you can open certain repository in your browser right from the app
+    </string>
+    <string name="credentials_text">App was created by Vitalii Pshenychniuk aka BlackBurn</string>
+    <string name="title_activity_loading">LoadingActivity</string>
 </resources>

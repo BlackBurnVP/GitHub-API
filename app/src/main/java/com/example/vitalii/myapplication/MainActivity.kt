@@ -20,14 +20,19 @@ import android.support.v7.app.ActionBar
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.widget.Toast
-
-
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
+import androidx.navigation.findNavController
+import androidx.navigation.ui.NavigationUI
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var mDrawerLayout: DrawerLayout
-    lateinit var recyclerView: RecyclerView
-    var posts: MutableList<GitHubPOJO> = ArrayList()
+    private lateinit var navController: NavController
+    private lateinit var mNavView:NavigationView
+    private lateinit var mDrawerLayout:DrawerLayout
+//    lateinit var recyclerView: RecyclerView
+//    lateinit var response2:List<GitHubPOJO>
+//    var posts: MutableList<GitHubPOJO> = ArrayList()
 
     private fun addShortcut() {
         //Adding shortcut for MainActivity
@@ -48,82 +53,76 @@ class MainActivity : AppCompatActivity() {
         addIntent.putExtra("duplicate", false)
         applicationContext.sendBroadcast(addIntent)
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         mDrawerLayout = findViewById(R.id.drawer_layout)
+        mNavView = findViewById(R.id.nav_view)
 
-        val toolbar: Toolbar = findViewById(R.id.toolbar)
-        setSupportActionBar(toolbar)
+        navController = this.findNavController(R.id.myNavHostFragment)
+        NavigationUI.setupActionBarWithNavController(this, navController,mDrawerLayout)
+        NavigationUI.setupWithNavController(mNavView, navController)
 
-        val actionbar: ActionBar? = supportActionBar
-        actionbar?.apply {
-            setDisplayHomeAsUpEnabled(true)
-            setHomeAsUpIndicator(R.drawable.ic_menu)
-        }
-
-        val navigationView: NavigationView = findViewById(R.id.nav_view)
-        navigationView.setNavigationItemSelectedListener { menuItem ->
-            // set item as selected to persist highlight
-            menuItem.isChecked = true
-            // close drawer when item is tapped
-            mDrawerLayout.closeDrawers()
-
-            // Add code here to update the UI based on the item selected
-            // For example, swap UI fragments here
-
-            true
-        }
-    }
-    fun click(view: View){
-        posts = ArrayList()
-
-        val name:String = findViewById<EditText>(R.id.editText).text.toString()
-        recyclerView = findViewById(R.id.posts_recycle_view)
-        val layoutManager = LinearLayoutManager(this)
-        recyclerView.layoutManager = layoutManager
-
-        val adapter = PostsAdapter(posts)
-        recyclerView.adapter = adapter
-
-        val service = Retrofit.Builder()
-            .baseUrl("https://api.github.com/") // Change your api
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(GitHubService::class.java)
-        service.retrieveRepositories(name)
-            .enqueue(object : Callback<List<GitHubPOJO>> {
-                override fun onResponse(call: Call<List<GitHubPOJO>>, response: Response<List<GitHubPOJO>>) {
-                    posts.addAll(response.body()!!)
-                    response.body()?.forEach { println ("TAG_: $it")}
-                    recyclerView.adapter?.notifyDataSetChanged()
-                }
-
-                override fun onFailure(call: Call<List<GitHubPOJO>>, t: Throwable) {
-                    Toast.makeText(this@MainActivity, "Error occured while networking", Toast.LENGTH_SHORT).show()
-                }
-            })
-        recyclerView.addOnItemTouchListener(
-            ClickListener(this, recyclerView, object : ClickListener.OnItemClickListener {
-                override fun onLongItemClick(view: View?, position: Int) {
-                }
-
-                override fun onItemClick(view: View, position: Int) {
-                    val url = posts!![position].htmlUrl
-                    val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                    startActivity(browserIntent)
-                }
-            })
-        )
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            android.R.id.home -> {
-                mDrawerLayout.openDrawer(GravityCompat.START)
-                true
+        navController.addOnNavigatedListener { nc: NavController, nd: NavDestination ->
+            if (nd.id == nc.graph.startDestination) {
+                mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+            } else {
+                mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
             }
-            else -> super.onOptionsItemSelected(item)
         }
     }
+
+//    fun click(view: View){
+//        posts = ArrayList()
+//
+//        val name:String = findViewById<EditText>(R.id.editText).text.toString()
+//        recyclerView = findViewById(R.id.posts_recycle_view)
+//        val layoutManager = LinearLayoutManager(this)
+//        recyclerView.layoutManager = layoutManager
+//
+//        val adapter = PostsAdapter(posts)
+//        recyclerView.adapter = adapter
+//
+//        val service = Retrofit.Builder()
+//            .baseUrl("https://api.github.com/") // Change your api
+//            .addConverterFactory(GsonConverterFactory.create())
+//            .build()
+//            .create(GitHubService::class.java)
+//        service.retrieveRepositories(name)
+//            .enqueue(object : Callback<List<GitHubPOJO>> {
+//                override fun onResponse(call: Call<List<GitHubPOJO>>, response: Response<List<GitHubPOJO>>) {
+//                    posts.addAll(response.body()!!)
+//                    response.body()?.forEach { println ("TAG_: $it")}
+//                    recyclerView.adapter?.notifyDataSetChanged()
+//                }
+//
+//                override fun onFailure(call: Call<List<GitHubPOJO>>, t: Throwable) {
+//                    Toast.makeText(this@MainActivity, "Error occured while networking", Toast.LENGTH_SHORT).show()
+//                }
+//            })
+//        recyclerView.addOnItemTouchListener(
+//            ClickListener(this, recyclerView, object : ClickListener.OnItemClickListener {
+//                override fun onLongItemClick(view: View?, position: Int) {
+//                }
+//
+//                override fun onItemClick(view: View, position: Int) {
+//                    val url = posts!![position].htmlUrl
+//                    val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+//                    startActivity(browserIntent)
+//                }
+//            })
+//        )
+//    }
+//
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        return when (item.itemId) {
+//            android.R.id.home -> {
+//                mDrawerLayout.openDrawer(GravityCompat.START)
+//                true
+//            }
+//            else -> super.onOptionsItemSelected(item)
+//        }
+//    }
 }
