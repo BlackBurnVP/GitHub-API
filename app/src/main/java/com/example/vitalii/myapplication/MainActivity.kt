@@ -2,30 +2,16 @@ package com.example.vitalii.myapplication
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.view.View
-import android.widget.EditText
-import com.example.vitalii.myapplication.api.GitHubPOJO
-import com.example.vitalii.myapplication.api.GitHubService
-import retrofit2.*
-import retrofit2.converter.gson.GsonConverterFactory
-import java.util.ArrayList
 import android.content.Intent
-import android.net.Uri
 import android.support.design.widget.NavigationView
-import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
-import android.support.v7.app.ActionBar
-import android.support.v7.widget.Toolbar
-import android.view.MenuItem
-import android.widget.Toast
 import androidx.navigation.NavController
-import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
+import androidx.navigation.NavDestination
 
-class MainActivity : AppCompatActivity() {
+
+class MainActivity : AppCompatActivity(){
 
     private lateinit var navController: NavController
     private lateinit var mNavView:NavigationView
@@ -44,13 +30,13 @@ class MainActivity : AppCompatActivity() {
         shortcutIntent.action = Intent.ACTION_MAIN
 
         val addIntent = Intent()
-            Intent.ShortcutIconResource.fromContext(
-                applicationContext,
-                R.mipmap.ic_launcher
-            )
+        Intent.ShortcutIconResource.fromContext(
+            applicationContext,
+            R.mipmap.ic_launcher
+        )
 
         addIntent.action = "com.android.launcher.action.INSTALL_SHORTCUT"
-        addIntent.putExtra("duplicate", false)
+        addIntent.putExtra("duplicate", false)  //may it's already there so don't duplicate
         applicationContext.sendBroadcast(addIntent)
     }
 
@@ -74,7 +60,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-//    fun click(view: View){
+    override fun onSupportNavigateUp(): Boolean {
+        val navController = this.findNavController(R.id.myNavHostFragment)
+        return NavigationUI.navigateUp(mDrawerLayout,navController)
+    }
+
+//    fun onClick(view:View){
 //        posts = ArrayList()
 //
 //        val name:String = findViewById<EditText>(R.id.editText).text.toString()
@@ -84,18 +75,23 @@ class MainActivity : AppCompatActivity() {
 //
 //        val adapter = PostsAdapter(posts)
 //        recyclerView.adapter = adapter
+//        //HIDE KEYBOARD
+//        val inputMethodManager = this.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+//        inputMethodManager.hideSoftInputFromWindow(this.currentFocus!!.windowToken, 0)
 //
 //        val service = Retrofit.Builder()
-//            .baseUrl("https://api.github.com/") // Change your api
+//            .baseUrl("https://api.github.com/") // CHANGE API
 //            .addConverterFactory(GsonConverterFactory.create())
 //            .build()
 //            .create(GitHubService::class.java)
 //        service.retrieveRepositories(name)
 //            .enqueue(object : Callback<List<GitHubPOJO>> {
 //                override fun onResponse(call: Call<List<GitHubPOJO>>, response: Response<List<GitHubPOJO>>) {
+//                    response2 = response.body()!!
+//
 //                    posts.addAll(response.body()!!)
 //                    response.body()?.forEach { println ("TAG_: $it")}
-//                    recyclerView.adapter?.notifyDataSetChanged()
+//                    //recyclerView.adapter?.notifyDataSetChanged()
 //                }
 //
 //                override fun onFailure(call: Call<List<GitHubPOJO>>, t: Throwable) {
@@ -109,20 +105,15 @@ class MainActivity : AppCompatActivity() {
 //
 //                override fun onItemClick(view: View, position: Int) {
 //                    val url = posts!![position].htmlUrl
-//                    val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-//                    startActivity(browserIntent)
+//                    println("URL =  $url")
+//                    view.findNavController().navigate(MainFragmentDirections.actionMainFragmentToWebFragment(url))
+//
+//                    //OPEN LINK IN SYSTEM DEFAULT BROWSER
+////                  val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+////                  startActivity(browserIntent)
 //                }
 //            })
 //        )
 //    }
-//
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        return when (item.itemId) {
-//            android.R.id.home -> {
-//                mDrawerLayout.openDrawer(GravityCompat.START)
-//                true
-//            }
-//            else -> super.onOptionsItemSelected(item)
-//        }
-//    }
 }
+

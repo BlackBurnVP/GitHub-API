@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools" android:id="@+id/navigation" app:startDestination="@id/mainFragment">
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/navigation"
+            app:startDestination="@id/mainFragment">
 
     <fragment android:id="@+id/mainFragment"
               android:name="com.example.vitalii.myapplication.fragments.MainFragment"
               android:label="MainFragment"
               tools:layout="@layout/fragment_main"
-                >
-        <action android:id="@+id/action_mainFragment_to_webFragment" app:destination="@id/webFragment"
+    >
+        <action android:id="@+id/action_mainFragment_to_webFragment"
+                app:destination="@id/webFragment"
                 app:popUpTo="@+id/mainFragment"/>
     </fragment>
     <fragment android:id="@+id/aboutFragment"
@@ -19,8 +22,11 @@
               android:name="com.example.vitalii.myapplication.fragments.WebFragment"
               android:label="WebFragment"
               tools:layout="@layout/fragment_web">
-        <argument android:name="navUrl" app:argType="string"/>
+        <argument android:name="navUrl"
+                  app:argType="string"/>
     </fragment>
-    <fragment android:id="@+id/credentialsFragment" android:name="com.example.vitalii.myapplication.fragments.CredentialsFragment"
-              android:label="Credentials" tools:layout="@layout/fragment_credentials"/>
+    <fragment android:id="@+id/credentialsFragment"
+              android:name="com.example.vitalii.myapplication.fragments.CredentialsFragment"
+              android:label="Credentials"
+              tools:layout="@layout/fragment_credentials"/>
 </navigation>

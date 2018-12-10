@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:padding="5dp"
+                xmlns:app="http://schemas.android.com/apk/res-auto" android:padding="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -12,7 +12,7 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:text="@string/there_wiil_be_your_text"/>
+            android:text="@string/there_wiil_be_your_text" app:fontFamily="@font/fira_sans"/>
 
     <TextView
             android:id="@+id/postitem_site"
@@ -23,5 +23,5 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:gravity="end"
-            android:textAlignment="textEnd"/>
+            android:textAlignment="textEnd" app:fontFamily="@font/fira_sans"/>
 </RelativeLayout>

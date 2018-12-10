@@ -11,6 +11,12 @@
     <string name="about_git">In this program you can Enter users\'s name from GitHub and look at his repositories. Also
         you can open certain repository in your browser right from the app
     </string>
-    <string name="credentials_text">App was created by Vitalii Pshenychniuk aka BlackBurn</string>
+    <string name="credentials_text">App was created by
+        \n
+    \nVitalii Pshenychniuk,
+    \nVitalii Panchenko,
+    \nAnastasia Horbachova,
+    \nSerhii Kasian.</string>
     <string name="title_activity_loading">LoadingActivity</string>
+    <string name="what_repository_lookin">What repository are you looking for?</string>
 </resources>
