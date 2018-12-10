@@ -26,15 +26,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.ArrayList
-import android.net.NetworkInfo
-import android.content.Context.CONNECTIVITY_SERVICE
-import android.support.v4.content.ContextCompat.getSystemService
 import android.net.ConnectivityManager
-import android.os.AsyncTask
-import com.example.vitalii.myapplication.InternetCheck
-import java.io.IOException
-import java.net.InetSocketAddress
-import java.net.Socket
 
 
 private const val ARG_PARAM1 = "param1"
