@@ -21,7 +21,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"
                 android:ems="10"
-                android:id="@+id/editText"
+                android:id="@+id/txt_user_name"
                 android:hint="@string/enter_user_name"
                 android:fontFamily="@font/fira_sans" android:layout_margin="5dp"/>
         <Button

@@ -35,9 +35,10 @@ private const val ARG_PARAM2 = "param2"
 class MainFragment : Fragment() {
 
     lateinit var recyclerView: RecyclerView
+    lateinit var name:String
     var responseSave:List<GitHubPOJO> = ArrayList()
     var posts: MutableList<GitHubPOJO> = ArrayList()
-    lateinit var btn:Button
+    private lateinit var btn:Button
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,60 +47,71 @@ class MainFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_main, container, false)
 
         btn = view.findViewById(R.id.button)
-        btn.setOnClickListener {
-            posts = ArrayList()
+        btn.setOnClickListener (onClick)
 
-            val name: String = view!!.findViewById<EditText>(R.id.editText).text.toString()
-            recyclerView = view.findViewById(R.id.posts_recycle_view)
-            val layoutManager = LinearLayoutManager(this.activity!!)
-            recyclerView.layoutManager = layoutManager
+        return view
+    }
 
-            val adapter = PostsAdapter(posts)
-            recyclerView.adapter = adapter
+    val onClick = View.OnClickListener {
+        posts = ArrayList()
 
-            hideKeyboard()
+        recyclerView = view!!.findViewById(R.id.posts_recycle_view)
+        val layoutManager = LinearLayoutManager(this.activity!!)
+        recyclerView.layoutManager = layoutManager
 
+        val adapter = PostsAdapter(posts)
+        recyclerView.adapter = adapter
+
+        hideKeyboard()
+        name = view!!.findViewById<EditText>(R.id.txt_user_name).text.toString()
+        if (name.isEmpty()){
+            Toast.makeText(activity!!,"You do not entered User's name",Toast.LENGTH_LONG).show()
+        };else{
             if (isInternet()) {
-                val service = Retrofit.Builder()
-                    .baseUrl("https://api.github.com/") // CHANGE API
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build()
-                    .create(GitHubService::class.java)
-                service.retrieveRepositories(name)
-                    .enqueue(object : Callback<List<GitHubPOJO>> {
-                        override fun onResponse(call: Call<List<GitHubPOJO>>, response: Response<List<GitHubPOJO>>) {
-                            responseSave = response.body()!!
-                            posts.addAll(responseSave)
-                            recyclerView.adapter?.notifyDataSetChanged()
-                            response.body()?.forEach { println("TAG_: $it") }
-                        }
-
-                        override fun onFailure(call: Call<List<GitHubPOJO>>, t: Throwable) {
-                        }
-                    })
-                recyclerView.addOnItemTouchListener(
-                    ClickListener(
-                        this.activity!!,
-                        recyclerView,
-                        object : ClickListener.OnItemClickListener {
-                            override fun onLongItemClick(view: View?, position: Int) {
-                            }
-
-                            override fun onItemClick(view: View, position: Int) {
-                                val url = posts[position].htmlUrl
-                                println("URL =  $url")
-                                view.findNavController().navigate(MainFragmentDirections.actionMainFragmentToWebFragment(url))
-//                              OPEN LINK IN SYSTEM DEFAULT BROWSER
-//                              val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-//                              startActivity(browserIntent)
-                            }
-                        })
-                )
+            serverConnect()
             };else {
                 Toast.makeText(activity!!,"Please, check your internet connection!",Toast.LENGTH_LONG).show()
             }
         }
-        return view
+    }
+
+    private fun serverConnect(){
+        val service = Retrofit.Builder()
+            .baseUrl("https://api.github.com/") // CHANGE API
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(GitHubService::class.java)
+        service.retrieveRepositories(name)
+            .enqueue(object : Callback<List<GitHubPOJO>> {
+                override fun onResponse(call: Call<List<GitHubPOJO>>, response: Response<List<GitHubPOJO>>) {
+                    responseSave = response.body()!!
+                    posts.addAll(responseSave)
+                    recyclerView.adapter?.notifyDataSetChanged()
+                    response.body()?.forEach { println("TAG_: $it") }
+                }
+
+                override fun onFailure(call: Call<List<GitHubPOJO>>, t: Throwable) {
+                }
+            })
+        recyclerClick()
+    }
+
+    private fun recyclerClick(){
+        recyclerView.addOnItemTouchListener(ClickListener(this.activity!!, recyclerView, object : ClickListener.OnItemClickListener {
+            override fun onLongItemClick(view: View?, position: Int) {
+            }
+
+            override fun onItemClick(view: View, position: Int) {
+                val url = posts[position].htmlUrl
+                println("URL =  $url")
+                view.findNavController().navigate(MainFragmentDirections.actionMainFragmentToWebFragment(url))
+//                    OPEN LINK IN SYSTEM DEFAULT BROWSER
+//                    val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+//                    startActivity(browserIntent)
+                    }
+                }
+            )
+        )
     }
 
     @Suppress("DEPRECATION")
