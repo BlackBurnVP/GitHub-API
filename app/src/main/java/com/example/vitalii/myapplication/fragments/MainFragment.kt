@@ -28,13 +28,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.ArrayList
 import android.net.ConnectivityManager
 
-
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
 class MainFragment : Fragment() {
 
-    lateinit var recyclerView: RecyclerView
+    lateinit var mRecyclerView: RecyclerView
     lateinit var name:String
     var responseSave:List<GitHubPOJO> = ArrayList()
     var posts: MutableList<GitHubPOJO> = ArrayList()
@@ -55,12 +51,12 @@ class MainFragment : Fragment() {
     val onClick = View.OnClickListener {
         posts = ArrayList()
 
-        recyclerView = view!!.findViewById(R.id.posts_recycle_view)
+        mRecyclerView = view!!.findViewById(R.id.posts_recycle_view)
         val layoutManager = LinearLayoutManager(this.activity!!)
-        recyclerView.layoutManager = layoutManager
+        mRecyclerView.layoutManager = layoutManager
 
         val adapter = PostsAdapter(posts)
-        recyclerView.adapter = adapter
+        mRecyclerView.adapter = adapter
 
         hideKeyboard()
         name = view!!.findViewById<EditText>(R.id.txt_user_name).text.toString()
@@ -68,7 +64,8 @@ class MainFragment : Fragment() {
             Toast.makeText(activity!!,"You do not entered User's name",Toast.LENGTH_LONG).show()
         };else{
             if (isInternet()) {
-            serverConnect()
+                serverConnect()
+                recyclerClick()
             };else {
                 Toast.makeText(activity!!,"Please, check your internet connection!",Toast.LENGTH_LONG).show()
             }
@@ -86,18 +83,17 @@ class MainFragment : Fragment() {
                 override fun onResponse(call: Call<List<GitHubPOJO>>, response: Response<List<GitHubPOJO>>) {
                     responseSave = response.body()!!
                     posts.addAll(responseSave)
-                    recyclerView.adapter?.notifyDataSetChanged()
+                    mRecyclerView.adapter?.notifyDataSetChanged()
                     response.body()?.forEach { println("TAG_: $it") }
                 }
 
                 override fun onFailure(call: Call<List<GitHubPOJO>>, t: Throwable) {
                 }
             })
-        recyclerClick()
     }
 
     private fun recyclerClick(){
-        recyclerView.addOnItemTouchListener(ClickListener(this.activity!!, recyclerView, object : ClickListener.OnItemClickListener {
+        mRecyclerView.addOnItemTouchListener(ClickListener(this.activity!!, mRecyclerView, object : ClickListener.OnItemClickListener {
             override fun onLongItemClick(view: View?, position: Int) {
             }
 
@@ -127,12 +123,18 @@ class MainFragment : Fragment() {
             inputMethodManager.hideSoftInputFromWindow(this.activity!!.currentFocus!!.windowToken, 0)
         }
     }
+    //TODo разобраться с длительной конект сессией
     override fun onResume() {
         super.onResume()
-        val adapter = PostsAdapter()
+
+        mRecyclerView = view!!.findViewById(R.id.posts_recycle_view)
+        val layoutManager = LinearLayoutManager(this.activity!!)
+        mRecyclerView.layoutManager = layoutManager
+        val adapter = PostsAdapter(posts)
+        mRecyclerView.adapter = adapter
         adapter.updateAdapterList(responseSave.toMutableList())
         println("RESUME")
-        println(responseSave)
+        responseSave.forEach { println("TAG_: $it") }
     }
 }
 
