@@ -24,7 +24,7 @@ class PostsAdapter(private var posts: MutableList<GitHubPOJO>? = ArrayList()) : 
 //        }
         holder.site.text = post.fullName     // Change what you wanna see
     }
-    fun updateAdapterList(newList: MutableList<GitHubPOJO>) {
+    fun updateAdapterList(newList: List<GitHubPOJO>) {
         posts!!.clear()
         posts!!.addAll(newList)
         notifyDataSetChanged()
