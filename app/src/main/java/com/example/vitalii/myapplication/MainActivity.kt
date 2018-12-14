@@ -1,10 +1,13 @@
 package com.example.vitalii.myapplication
 
+import android.app.Activity
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.content.Intent
 import android.support.design.widget.NavigationView
 import android.support.v4.widget.DrawerLayout
+import android.view.MotionEvent
+import android.view.inputmethod.InputMethodManager
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
@@ -16,9 +19,6 @@ class MainActivity : AppCompatActivity(){
     private lateinit var navController: NavController
     private lateinit var mNavView:NavigationView
     private lateinit var mDrawerLayout:DrawerLayout
-//    lateinit var recyclerView: RecyclerView
-//    lateinit var response2:List<GitHubPOJO>
-//    var posts: MutableList<GitHubPOJO> = ArrayList()
 
     private fun addShortcut() {
         //Adding shortcut for MainActivity
@@ -65,55 +65,34 @@ class MainActivity : AppCompatActivity(){
         return NavigationUI.navigateUp(mDrawerLayout,navController)
     }
 
-//    fun onClick(view:View){
-//        posts = ArrayList()
-//
-//        val name:String = findViewById<EditText>(R.id.editText).text.toString()
-//        recyclerView = findViewById(R.id.posts_recycle_view)
-//        val layoutManager = LinearLayoutManager(this)
-//        recyclerView.layoutManager = layoutManager
-//
-//        val adapter = PostsAdapter(posts)
-//        recyclerView.adapter = adapter
-//        //HIDE KEYBOARD
-//        val inputMethodManager = this.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-//        inputMethodManager.hideSoftInputFromWindow(this.currentFocus!!.windowToken, 0)
-//
-//        val service = Retrofit.Builder()
-//            .baseUrl("https://api.github.com/") // CHANGE API
-//            .addConverterFactory(GsonConverterFactory.create())
-//            .build()
-//            .create(GitHubService::class.java)
-//        service.retrieveRepositories(name)
-//            .enqueue(object : Callback<List<GitHubPOJO>> {
-//                override fun onResponse(call: Call<List<GitHubPOJO>>, response: Response<List<GitHubPOJO>>) {
-//                    response2 = response.body()!!
-//
-//                    posts.addAll(response.body()!!)
-//                    response.body()?.forEach { println ("TAG_: $it")}
-//                    //recyclerView.adapter?.notifyDataSetChanged()
-//                }
-//
-//                override fun onFailure(call: Call<List<GitHubPOJO>>, t: Throwable) {
-//                    Toast.makeText(this@MainActivity, "Error occured while networking", Toast.LENGTH_SHORT).show()
-//                }
-//            })
-//        recyclerView.addOnItemTouchListener(
-//            ClickListener(this, recyclerView, object : ClickListener.OnItemClickListener {
-//                override fun onLongItemClick(view: View?, position: Int) {
-//                }
-//
-//                override fun onItemClick(view: View, position: Int) {
-//                    val url = posts!![position].htmlUrl
-//                    println("URL =  $url")
-//                    view.findNavController().navigate(MainFragmentDirections.actionMainFragmentToWebFragment(url))
-//
-//                    //OPEN LINK IN SYSTEM DEFAULT BROWSER
-////                  val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-////                  startActivity(browserIntent)
-//                }
-//            })
-//        )
-//    }
+    override fun onBackPressed() {
+        super.onBackPressed()
+        moveTaskToBack(true)
+        println("BACK PRESSED")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        println("DESTROYED")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        println("RESUMED")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        println("PAUSED")
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        if (currentFocus != null){
+            val inputMethodManager = this.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+                inputMethodManager.hideSoftInputFromWindow(this.currentFocus!!.windowToken, 0)
+            currentFocus.clearFocus()
+        }
+        return super.dispatchTouchEvent(ev)
+    }
 }
 

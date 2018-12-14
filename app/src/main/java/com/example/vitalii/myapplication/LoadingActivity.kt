@@ -9,12 +9,13 @@ import android.widget.ProgressBar
 class LoadingActivity : AppCompatActivity() {
 
     private var handler = Handler()
+    private lateinit var progressBar: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_loading)
 
-        val progressBar: ProgressBar = findViewById(R.id.progressBar2)
+        progressBar = findViewById(R.id.progressBar2)
         progressBar.progress = 0
         progressBar.progress = 20
         handler.postDelayed({
@@ -26,6 +27,6 @@ class LoadingActivity : AppCompatActivity() {
         handler.postDelayed({
             val mainIntent = Intent(this, MainActivity::class.java)
             startActivity(mainIntent)
-        },5000)
+        }, 5000)
     }
 }

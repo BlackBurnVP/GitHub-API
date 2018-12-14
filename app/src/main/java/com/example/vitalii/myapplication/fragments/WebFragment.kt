@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import com.example.vitalii.myapplication.MainActivity
 import com.example.vitalii.myapplication.R
 import com.example.vitalii.myapplication.fragments.WebFragmentArgs
 

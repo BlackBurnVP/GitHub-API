@@ -8,15 +8,19 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.text.Layout
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.navigation.findNavController
 import com.example.vitalii.myapplication.ClickListener
+import com.example.vitalii.myapplication.MainActivity
 import com.example.vitalii.myapplication.PostsAdapter
 import com.example.vitalii.myapplication.R
 import com.example.vitalii.myapplication.api.GitHubPOJO
@@ -31,9 +35,10 @@ import java.util.*
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class MainFragment : Fragment() {
 
-    lateinit var mRecyclerView: RecyclerView
+    private lateinit var mRecyclerView: RecyclerView
+    private lateinit var txt_name:EditText
+    private lateinit var btn:Button
     lateinit var name:String
-    lateinit var btn:Button
     private var service: GitHubService? = null
     private var obj: Callback<List<GitHubPOJO>>? = null
     private var retrofit:Retrofit? = null
@@ -52,7 +57,9 @@ class MainFragment : Fragment() {
         layoutManager = LinearLayoutManager(activity!!)
         mRecyclerView.layoutManager = layoutManager
         mRecyclerView.adapter = adapter
-
+        txt_name = view.findViewById(R.id.txt_user_name)
+        txt_name.clearFocus()
+        hideKeyboard()
         btn = view.findViewById(R.id.button)
         btn.setOnClickListener (onClick)
 
@@ -62,7 +69,7 @@ class MainFragment : Fragment() {
     val onClick = View.OnClickListener {
 
         hideKeyboard()
-        name = view!!.findViewById<EditText>(R.id.txt_user_name).text.toString()
+        name = txt_name.text.toString()
         when {
             name.isEmpty() -> Toast.makeText(activity!!,"You do not entered User's name",Toast.LENGTH_LONG).show()
             isInternet() -> {
