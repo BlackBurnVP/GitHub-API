@@ -8,19 +8,15 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.text.Layout
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.navigation.findNavController
 import com.example.vitalii.myapplication.ClickListener
-import com.example.vitalii.myapplication.MainActivity
 import com.example.vitalii.myapplication.PostsAdapter
 import com.example.vitalii.myapplication.R
 import com.example.vitalii.myapplication.api.GitHubPOJO
@@ -86,9 +82,8 @@ class MainFragment : Fragment() {
                 adapter.updateAdapterList(response.body()!!)
                 response.body()?.forEach { println("TAG_: $it") }
             }
-
             override fun onFailure(call: Call<List<GitHubPOJO>>, t: Throwable) {
-
+                Toast.makeText(activity!!,"Something went's wrong!",Toast.LENGTH_LONG).show()
             }
         }
         retrofit = Retrofit.Builder()

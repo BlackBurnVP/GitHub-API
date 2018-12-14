@@ -1,9 +1,11 @@
 package com.example.vitalii.myapplication
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.content.Intent
+import android.os.Handler
 import android.support.design.widget.NavigationView
 import android.support.v4.widget.DrawerLayout
 import android.view.MotionEvent
@@ -19,6 +21,8 @@ class MainActivity : AppCompatActivity(){
     private lateinit var navController: NavController
     private lateinit var mNavView:NavigationView
     private lateinit var mDrawerLayout:DrawerLayout
+    private var resultDialog:Boolean = false
+    lateinit var handler:Handler
 
     private fun addShortcut() {
         //Adding shortcut for MainActivity
@@ -59,6 +63,15 @@ class MainActivity : AppCompatActivity(){
             }
         }
     }
+     fun alertDialog(){
+         val builder = AlertDialog.Builder(this)
+         builder.setTitle("Close application")
+             .setMessage("Do you want to close app?")
+             .setPositiveButton("YES") { dialog, which -> System.exit(0) }
+             .setNegativeButton("NO") { dialog, which -> dialog.cancel() }
+             .create()
+             .show()
+    }
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = this.findNavController(R.id.myNavHostFragment)
@@ -69,21 +82,6 @@ class MainActivity : AppCompatActivity(){
         super.onBackPressed()
         moveTaskToBack(true)
         println("BACK PRESSED")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        println("DESTROYED")
-    }
-
-    override fun onResume() {
-        super.onResume()
-        println("RESUMED")
-    }
-
-    override fun onPause() {
-        super.onPause()
-        println("PAUSED")
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
