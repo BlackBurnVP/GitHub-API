@@ -104,7 +104,9 @@ class MainFragment : Fragment() {
             override fun onItemClick(view: View, position: Int) {
                 val url = posts[position].htmlUrl
                 println("URL =  $url")
-                view.findNavController().navigate(MainFragmentDirections.actionMainFragmentToWebFragment(url))
+//                view.findNavController().navigate(MainFragmentDirections.actionMainFragmentToWebFragment(url))
+                view.findNavController().navigate(MainFragmentDirections.ActionMainFragmentToWebFragment(url))
+
 //                    OPEN LINK IN SYSTEM DEFAULT BROWSER
 //                    val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
 //                    startActivity(browserIntent)
